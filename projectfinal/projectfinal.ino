@@ -7,15 +7,14 @@ LiquidCrystal_I2C lcd(0x3f, 16, 2);
 int DA = A0; // A0 pinini DA değişkenine aktarıyoruz
 int ses1 = 100;//
 
-dht11 DHT11;
-void setup()
-{
+int sesdegeri = 0;
+int led_status=0;
 
+dht11 DHT11;
+void setup(){
 lcd.begin();
 lcd.backlight();
-Serial.begin(9600); // Seri iletişimi başlatıyoruz.
-Serial.println("Arduinoturkiye.com DHT11 Test Programi");
-pinMode(3, OUTPUT);
+pinMode(7, OUTPUT);
 }
  
 void loop(){
@@ -39,7 +38,4 @@ lcd.print(".C");
        led_status=0;
   }
   //Açıp Kapama Döngüsü-end
-// 2 saniye bekliyoruz. 2 saniyede bir veriler ekrana yazdırılacak.
-//delay(500);
-
 }
