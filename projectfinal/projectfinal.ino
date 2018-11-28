@@ -4,8 +4,8 @@
 #define DHT11PIN 2 // DHT11PIN olarak Dijital 2"yi belirliyoruz.
 LiquidCrystal_I2C lcd(0x3f, 16, 2);
 
-int DA = A0; // A0 pinini DA değişkenine aktarıyoruz
-int ses1 = 100;//
+int DA = A0; 
+int ses1 = 300;//
 
 int sesdegeri = 0;
 int led_status=0;
@@ -15,6 +15,8 @@ void setup(){
 lcd.begin();
 lcd.backlight();
 pinMode(7, OUTPUT);
+
+Serial.begin(500000);
 }
  
 void loop(){
@@ -28,14 +30,22 @@ lcd.print(".C");
 
 //Sensörden Veri Alma
   sesdegeri = analogRead(DA);  
-  
+ Serial.println(sesdegeri); 
   //Açıp Kapama Döngüsü
-  if (sesdegeri > ses1 && led_status==0) { //Eğer algılanan ses seviyesi belirlediğimiz değerden büyükse
-          digitalWrite(3, HIGH);//3.pindeki ledimize güç veriyor
-          led_status=1;//led durumunu 1 konumuna çalışır duruma getirip kapanma durumunda kullanmak için
+  if (sesdegeri > ses1 && led_status==0) { 
+          digitalWrite(7, HIGH);
+          led_status=1;
+          lcd.setCursor(0,1);
+           lcd.print("LED_POSITIVE");
+            
   }else if(sesdegeri > ses1 && led_status==1){
-       digitalWrite(3, LOW);//3.pindeki ledimize güç kesiyor
+       digitalWrite(7, LOW);
        led_status=0;
+         lcd.setCursor(0,1);
+         lcd.print("LED_NEGATIVE");
+      
+       
   }
   //Açıp Kapama Döngüsü-end
+  
 }
