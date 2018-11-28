@@ -4,26 +4,36 @@ LiquidCrystal_I2C lcd(0x3f, 16, 2);
 
 //for sound
 int DA = A0; 
-int ses1 = 200;//
+int sesvalue = 150;//
 int sesdegeri = 0;
 int led_status=0;
 int counter_clamp=0;
 int control=0;
-
+//ses2
+int ses1 = 30;//analog ses seviyesi
+int ses2 = 40;
+int ses3 = 50;
+int ses4 = 70;
+int ses5 = 90;
+int ses6 = 100;
+int ses7 = 120;
+int ses8 = 130;
+int ses9 = 139;
 //for temp
 #include <dht11.h> // dht11 kütüphanesini ekliyoruz.
 #define DHT11PIN 2 // DHT11PIN olarak Dijital 2"yi belirliyoruz.
 dht11 DHT11;
 
 //for button
-int led1=5;
-int buton1=6;
-int buton1Durum;
-int led1Durum=0;
-int x=0;
+
+int buton=3;
+int durum=0;
+int butondeger=0;
 void setup(){
 lcd.begin();
 lcd.backlight();
+pinMode(5, OUTPUT);
+pinMode(6, OUTPUT);
 pinMode(7, OUTPUT);
 pinMode(8, OUTPUT);
 pinMode(9, OUTPUT);
@@ -31,8 +41,7 @@ pinMode(10, OUTPUT);
 pinMode(11, OUTPUT);
 pinMode(12, OUTPUT);
 pinMode(13, OUTPUT);
-  pinMode(led1, OUTPUT);
-  pinMode(buton1, INPUT);
+pinMode(buton, INPUT);
 Serial.begin(1000000);
 }
  
@@ -49,36 +58,23 @@ lcd.print(".C");
 
 //Sensörden Veri Alma
  sesdegeri = analogRead(DA); 
- if(sesdegeri>ses1){
-   Serial.println(sesdegeri);
+    Serial.println(sesdegeri);
+
+ if(sesdegeri>sesvalue){
  }
  
 //button control
-  buton1Durum=digitalRead(buton1);
-  if(buton1Durum==HIGH && x==0){
-    x=1;
-    if(led1Durum==0){
-      led1Durum=1;}
-    else if(led1Durum==1){
-      led1Durum=0;}
+   butondeger=digitalRead(buton);
+  if(butondeger==HIGH && durum==0){
+    durum=1;
+    delay(100);
+  }else if(butondeger==HIGH && durum==1){
+    durum=0;
+     delay(100);
   }
-  else if(buton1Durum==LOW && x==1){
-    x=0;
-  }
- 
-  if (led1Durum==1){
-      lcd.setCursor(13,0);
-    lcd.print("M.1");
-    digitalWrite(led1, HIGH);
-  }
-  else if(led1Durum==0){
-    lcd.setCursor(13,0);
-    lcd.print("M.2");
-    digitalWrite(led1, LOW);
-  }
-
+  //Serial.println(durum);
   //sescontrol
-if(sesdegeri > ses1){
+if(sesdegeri > sesvalue){
  counter_clamp++;
  
  if(counter_clamp==2){
@@ -93,9 +89,71 @@ if(sesdegeri > ses1){
  
 }
 
-if(led_status==1 && control==1){
+
+ if(durum==1){
+   lcd.setCursor(13,0);
+   lcd.print("V.2");
+   if (sesdegeri >= ses1) { //Eğer algılanan ses seviyesi belirlediğimiz değerden büyükse
+    digitalWrite(5, HIGH);
+  }
+  else {
+    digitalWrite(5, LOW);
+  }
+  delay(40);
+   if (sesdegeri >= ses2) { //Eğer algılanan ses seviyesi belirlediğimiz değerden büyükse
+    digitalWrite(6, HIGH);
+  }
+  else {
+    digitalWrite(6, LOW);
+  }delay(40);
+   if (sesdegeri >= ses3) { //Eğer algılanan ses seviyesi belirlediğimiz değerden büyükse
+    digitalWrite(7, HIGH);
+  }
+  else {
+    digitalWrite(7, LOW);
+  }delay(40);
+   if (sesdegeri >= ses4) { //Eğer algılanan ses seviyesi belirlediğimiz değerden büyükse
+    digitalWrite(8, HIGH);
+  }
+  else {
+    digitalWrite(8, LOW);
+  }delay(40);
+   if (sesdegeri >= ses5) { //Eğer algılanan ses seviyesi belirlediğimiz değerden büyükse
+    digitalWrite(9, HIGH);
+  }
+  else {
+    digitalWrite(9, LOW);
+  }delay(40);
+    if (sesdegeri >= ses6) { //Eğer algılanan ses seviyesi belirlediğimiz değerden büyükse
+    digitalWrite(10, HIGH);
+  }
+  else {
+    digitalWrite(10, LOW);
+  }delay(40);
+    if (sesdegeri >= ses7) { //Eğer algılanan ses seviyesi belirlediğimiz değerden büyükse
+    digitalWrite(11, HIGH);
+  }
+  else {
+    digitalWrite(11, LOW);
+  }delay(40);
+    if (sesdegeri >= ses8) { //Eğer algılanan ses seviyesi belirlediğimiz değerden büyükse
+    digitalWrite(12, HIGH);
+  }
+  else {
+    digitalWrite(12, LOW);
+  }delay(40);
+    if (sesdegeri >= ses9) { //Eğer algılanan ses seviyesi belirlediğimiz değerden büyükse
+    digitalWrite(13, HIGH);
+  }
+  else {
+    digitalWrite(13, LOW);
+  }
+  }else{
+   lcd.setCursor(13,0);
+   lcd.print("V.1");
+   if(led_status==1 && control==1){
   
-  for(int i=7;i<=13;i++){
+  for(int i=5;i<=13;i++){
           digitalWrite(i, HIGH);
          delay(175);
           }
@@ -104,7 +162,7 @@ if(led_status==1 && control==1){
           control=0;
 }else if(led_status==0 && control==1){
   
-  for(int i=7;i<=13;i++){
+  for(int i=5;i<=13;i++){
           digitalWrite(i, LOW);
         delay(175);
           }
@@ -112,5 +170,7 @@ if(led_status==1 && control==1){
     lcd.print("LED_NEGATIVE");
      control=0;
 }
- 
 }
+
+}
+
