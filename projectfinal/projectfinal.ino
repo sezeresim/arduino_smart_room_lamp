@@ -4,7 +4,7 @@ LiquidCrystal_I2C lcd(0x3f, 16, 2);
 
 //for sound
 int DA = A0; 
-int sesvalue = 90;//
+int sesvalue = 150;//
 int sesdegeri = 0;
 int led_status=0;
 int counter_clamp=0;
@@ -52,7 +52,7 @@ Serial.begin(1000000);
  
 void loop(){
 
-  
+ //for temprature
 int chk = DHT11.read(DHT11PIN); 
 lcd.setCursor(0,0);
 lcd.print("Temp:");
@@ -64,9 +64,10 @@ lcd.print(".C");
 //Sensörden Veri Alma
  sesdegeri = analogRead(DA); 
  
-     Serial.println(sesdegeri);
+     
 
  if(sesdegeri>sesvalue){
+  Serial.println(sesdegeri);
  }
  
 //button control
@@ -98,7 +99,7 @@ lcd.print(".C");
     durum2=0;
     delay(100);
   }
-  Serial.println(durum2);
+ 
   switch(durum2){
     case 0:
      lcd.setCursor(10,0);
@@ -135,7 +136,7 @@ lcd.print(".C");
      
   }
 
-  //Serial.println(durum);
+  
   //sescontrol
 if(sesdegeri > sesvalue){
  counter_clamp++;
