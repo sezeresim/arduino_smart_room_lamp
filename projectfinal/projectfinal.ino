@@ -82,15 +82,19 @@ lcd.print(".C");
 //button 2
  butondeger2=digitalRead(buton2);
   if(butondeger2==HIGH && durum2==0){
+    sesvalue=100;
     durum2=1;
     delay(100);
   }else if(butondeger2==HIGH && durum2==1){
+    sesvalue=110;
     durum2=2;
     delay(100);
   }else if(butondeger2==HIGH && durum2==2){
+    sesvalue=120;
     durum2=3;
     delay(100);
   }else if(butondeger2==HIGH && durum2==3){
+    sesvalue=90;
     durum2=0;
     delay(100);
   }
