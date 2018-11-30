@@ -4,7 +4,7 @@ LiquidCrystal_I2C lcd(0x3f, 16, 2);
 
 //for sound
 int DA = A0; 
-int sesvalue = 150;//
+int sesvalue = 90;//
 int sesdegeri = 0;
 int led_status=0;
 int counter_clamp=0;
@@ -13,12 +13,12 @@ int control=0;
 int ses1 = 30;//analog ses seviyesi
 int ses2 = 40;
 int ses3 = 50;
-int ses4 = 70;
+int ses4 = 80;
 int ses5 = 90;
 int ses6 = 100;
 int ses7 = 120;
-int ses8 = 130;
-int ses9 = 139;
+int ses8 = 150;
+int ses9 = 180;
 //for temp
 #include <dht11.h> // dht11 kütüphanesini ekliyoruz.
 #define DHT11PIN 2 // DHT11PIN olarak Dijital 2"yi belirliyoruz.
@@ -29,6 +29,10 @@ dht11 DHT11;
 int buton=3;
 int durum=0;
 int butondeger=0;
+//for button 2
+int buton2=4;
+int durum2=0;
+int butondeger2=0;
 void setup(){
 lcd.begin();
 lcd.backlight();
@@ -42,6 +46,7 @@ pinMode(11, OUTPUT);
 pinMode(12, OUTPUT);
 pinMode(13, OUTPUT);
 pinMode(buton, INPUT);
+pinMode(buton2,INPUT);
 Serial.begin(1000000);
 }
  
@@ -58,7 +63,8 @@ lcd.print(".C");
 
 //Sensörden Veri Alma
  sesdegeri = analogRead(DA); 
-    Serial.println(sesdegeri);
+ 
+     Serial.println(sesdegeri);
 
  if(sesdegeri>sesvalue){
  }
@@ -72,6 +78,59 @@ lcd.print(".C");
     durum=0;
      delay(100);
   }
+
+//button 2
+ butondeger2=digitalRead(buton2);
+  if(butondeger2==HIGH && durum2==0){
+    durum2=1;
+    delay(100);
+  }else if(butondeger2==HIGH && durum2==1){
+    durum2=2;
+    delay(100);
+  }else if(butondeger2==HIGH && durum2==2){
+    durum2=3;
+    delay(100);
+  }else if(butondeger2==HIGH && durum2==3){
+    durum2=0;
+    delay(100);
+  }
+  Serial.println(durum2);
+  switch(durum2){
+    case 0:
+     lcd.setCursor(10,0);
+     lcd.print("/");
+     lcd.setCursor(11,0);
+     lcd.print(durum2);
+     lcd.setCursor(12,0);
+     lcd.print("/");
+     break;
+     case 1:
+     lcd.setCursor(10,0);
+     lcd.print("/");
+     lcd.setCursor(11,0);
+     lcd.print(durum2);
+     lcd.setCursor(12,0);
+     lcd.print("/");
+     break;
+     case 2:
+     lcd.setCursor(10,0);
+     lcd.print("/");
+     lcd.setCursor(11,0);
+     lcd.print(durum2);
+     lcd.setCursor(12,0);
+     lcd.print("/");
+     break;
+     case 3:
+     lcd.setCursor(10,0);
+     lcd.print("/");
+     lcd.setCursor(11,0);
+     lcd.print(durum2);
+     lcd.setCursor(12,0);
+     lcd.print("/");
+     break;
+     
+  }
+
   //Serial.println(durum);
   //sescontrol
 if(sesdegeri > sesvalue){
@@ -99,49 +158,50 @@ if(sesdegeri > sesvalue){
   else {
     digitalWrite(5, LOW);
   }
-  delay(40);
+
    if (sesdegeri >= ses2) { //Eğer algılanan ses seviyesi belirlediğimiz değerden büyükse
     digitalWrite(6, HIGH);
   }
   else {
     digitalWrite(6, LOW);
-  }delay(40);
+  }
+  
    if (sesdegeri >= ses3) { //Eğer algılanan ses seviyesi belirlediğimiz değerden büyükse
     digitalWrite(7, HIGH);
   }
   else {
     digitalWrite(7, LOW);
-  }delay(40);
+  }
    if (sesdegeri >= ses4) { //Eğer algılanan ses seviyesi belirlediğimiz değerden büyükse
     digitalWrite(8, HIGH);
   }
   else {
     digitalWrite(8, LOW);
-  }delay(40);
+  }
    if (sesdegeri >= ses5) { //Eğer algılanan ses seviyesi belirlediğimiz değerden büyükse
     digitalWrite(9, HIGH);
   }
   else {
     digitalWrite(9, LOW);
-  }delay(40);
+  }
     if (sesdegeri >= ses6) { //Eğer algılanan ses seviyesi belirlediğimiz değerden büyükse
     digitalWrite(10, HIGH);
   }
   else {
     digitalWrite(10, LOW);
-  }delay(40);
+  }
     if (sesdegeri >= ses7) { //Eğer algılanan ses seviyesi belirlediğimiz değerden büyükse
     digitalWrite(11, HIGH);
   }
   else {
     digitalWrite(11, LOW);
-  }delay(40);
+  }
     if (sesdegeri >= ses8) { //Eğer algılanan ses seviyesi belirlediğimiz değerden büyükse
     digitalWrite(12, HIGH);
   }
   else {
     digitalWrite(12, LOW);
-  }delay(40);
+  }
     if (sesdegeri >= ses9) { //Eğer algılanan ses seviyesi belirlediğimiz değerden büyükse
     digitalWrite(13, HIGH);
   }
@@ -158,7 +218,9 @@ if(sesdegeri > sesvalue){
          delay(175);
           }
           lcd.setCursor(0,1);
-          lcd.print("LED_POSITIVE");
+          lcd.print("Cemre Eren");
+          lcd.setCursor(13,1);
+          lcd.print("ON");
           control=0;
 }else if(led_status==0 && control==1){
   
@@ -167,7 +229,9 @@ if(sesdegeri > sesvalue){
         delay(175);
           }
     lcd.setCursor(0,1);
-    lcd.print("LED_NEGATIVE");
+    lcd.print("Cemre Eren");
+      lcd.setCursor(13,1);
+          lcd.print("OFF");
      control=0;
 }
 }
