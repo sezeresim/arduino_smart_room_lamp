@@ -3,47 +3,50 @@
 LiquidCrystal_I2C lcd(0x3f, 16, 2);
 //sıcaklık
 int lm35Pin = A2;
-unsigned long zaman = 0, eskizaman = 0;
-//ses için
+unsigned long zaman = 0, eskizaman = 0; //lcd ekranda sıcaklığı 2 saniye bir güncellemek için zaman değişkenleri
+//ses için sabitler
 int ses_sensoru = A0;
+// ses 1
 int alkis = 0;
 long algilama_araligi_baslangic = 0;
 long algilama_araligi = 0;
 boolean isik_durumu = false;
 int esik=500;
-//ses2
-int ses1 = 30;//analog ses seviyesi
-int ses2 = 40;
-int ses3 = 50;
-int ses4 = 80;
-int ses5 = 90;
-int ses6 = 100;
-int ses7 = 120;
-int ses8 = 150;
-int ses9 = 180;
+//ses 2
+int ses1 = 100;
+int ses2 = 200;
+int ses3 = 300;
+int ses4 = 400;
+int ses5 = 500;
+int ses6 = 600;
 //lcd control
 int sahip=0;
-//for button
 
+//for button 1
 int buton=3;
 int durum=0;
 int butondeger=0;
+
 //for button 2
 int buton2=4;
 int durum2=0;
 int butondeger2=0;
 
 void setup() {
- lcd.begin();
+  //lcd başlatma ve arka ışık aydınlatması
+lcd.begin();
 lcd.backlight();
+//Ledler
 pinMode(5, OUTPUT);
 pinMode(6, OUTPUT);
 pinMode(7, OUTPUT);
 pinMode(8, OUTPUT);
 pinMode(9, OUTPUT);
 pinMode(10, OUTPUT);
+//butonlar
 pinMode(buton, INPUT);
 pinMode(buton2,INPUT);
+//Sensör ve diğer değişkenler için serial monitör 
 Serial.begin(1000000);
 }
  
@@ -52,14 +55,19 @@ void loop() {
 if(sahip==0){
    lcd.setCursor(0,1);
  lcd.print("Cemre Eren");
+ 
  lcd.setCursor(10,0);
      lcd.print("/");
+     
      lcd.setCursor(11,0);
      lcd.print(durum2);
+     
      lcd.setCursor(12,0);
      lcd.print("/");
+     
      lcd.setCursor(13,0);
    lcd.print("V.1");
+   
     lcd.setCursor(13,1);
             lcd.print("OFF");
             lcd.setCursor(0,0);
@@ -74,7 +82,7 @@ lcd.print(".C");
   
   if (fark > 2000){
     int sicaklikVolt = analogRead(lm35Pin);
-    int sicaklikC = sicaklikC = sicaklikVolt / 9.31; 
+    int sicaklikC  = sicaklikVolt / 9.31; 
     lcd.setCursor(5, 0);
     lcd.print(sicaklikC);
     eskizaman = zaman;
@@ -85,10 +93,11 @@ lcd.print(".C");
 
 //button 1
   butondeger=digitalRead(buton);
+  
   if(butondeger==HIGH && durum==0){
     durum=1;
     lcd.setCursor(13,0);
-   lcd.print("V.2");
+    lcd.print("V.2");
     delay(100);
   }else if(butondeger==HIGH && durum==1){
      lcd.setCursor(13,0);
@@ -99,9 +108,9 @@ lcd.print(".C");
   
   //button 2
  butondeger2=digitalRead(buton2);
+ 
   if(butondeger2==HIGH && durum2==0){
-    
-    esik=550;
+    esik=400;
     durum2=1;
     delay(100);
   }else if(butondeger2==HIGH && durum2==1){
@@ -109,7 +118,7 @@ lcd.print(".C");
     durum2=2;
     delay(100);
   }else if(butondeger2==HIGH && durum2==2){
-    esik=650;
+    esik=700;
     durum2=3;
     delay(100);
   }else if(butondeger2==HIGH && durum2==3){
@@ -121,8 +130,8 @@ lcd.print(".C");
    lcd.setCursor(11,0);
    lcd.print(durum2);
   
-  int sensor_durumu = analogRead(ses_sensoru);
- Serial.println(sensor_durumu);
+ int sensor_durumu = analogRead(ses_sensoru);
+ Serial.println(sensor_durumu); //Serial monitörde değerleri kontrol etmek için
   //Modlar
   if(durum==0){
     
@@ -147,20 +156,22 @@ lcd.print(".C");
       if (!isik_durumu)
         {
           isik_durumu = true;
+          lcd.setCursor(13,1);
+          lcd.print(" ON");
+          
           for(int i=5;i<=10;i++){
             digitalWrite(i, HIGH);
-            lcd.setCursor(13,1);
-            lcd.print(" ON");
           }
           
         }
         else if (isik_durumu)
         {
           isik_durumu = false;
+           lcd.setCursor(13,1);
+            lcd.print("OFF");
            for(int i=5;i<=10;i++){
             digitalWrite(i, LOW);
-            lcd.setCursor(13,1);
-            lcd.print("OFF");
+           
           }
         }
     }
